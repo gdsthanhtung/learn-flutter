@@ -2,7 +2,24 @@ import 'package:flutter/material.dart';
 import '../config/app_colors.dart';
 
 class ModalBottomWidget extends StatelessWidget {
-  const ModalBottomWidget({super.key});
+  ModalBottomWidget({super.key, required this.addTask});
+  final Function addTask;
+  final TextEditingController controller = TextEditingController();
+
+  void _handleOnPress(BuildContext context) {
+    final taskName = controller.text.trim();
+    if (taskName.isNotEmpty) {
+      addTask(taskName);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Task "$taskName" added!')));
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please enter a task name')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +30,7 @@ class ModalBottomWidget extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              controller: controller,
               decoration: InputDecoration(
                 labelText: 'Enter your task...',
                 border: OutlineInputBorder(
@@ -41,7 +59,7 @@ class ModalBottomWidget extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  print('Task added!'); // Placeholder for adding task logic
+                  _handleOnPress(context);
                 },
                 child: const Text(
                   'Add Task',

@@ -5,15 +5,11 @@ import 'widget/modal_bottom_widget.dart';
 import 'model/data_items.dart';
 
 class MyTodoList extends StatelessWidget {
-  const MyTodoList({super.key});
+  const MyTodoList(this.taskList, this.addTask, this.removeTask, {super.key});
 
-  static const List<DataItems> tasks = [
-    DataItems(id: '1', name: 'Task 1'),
-    DataItems(id: '2', name: 'Task 2'),
-    DataItems(id: '3', name: 'Task 3'),
-    DataItems(id: '4', name: 'Task 4'),
-    DataItems(id: '5', name: 'Task meo meo'),
-  ];
+  final List<DataItems> taskList;
+  final Function addTask;
+  final Function removeTask;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +25,13 @@ class MyTodoList extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
           child: Column(
-            children: tasks.map((item) => ItemTaskWidget(item: item)).toList(),
+            children:
+                taskList
+                    .map(
+                      (item) =>
+                          ItemTaskWidget(item: item, removeTask: removeTask),
+                    )
+                    .toList(),
           ),
         ),
       ),
@@ -44,7 +46,7 @@ class MyTodoList extends StatelessWidget {
             isScrollControlled: true,
             context: context,
             builder: (context) {
-              return ModalBottomWidget();
+              return ModalBottomWidget(addTask: addTask);
             },
           );
         },
